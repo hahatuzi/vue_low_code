@@ -7,6 +7,7 @@ const menuConfig = [
   {
     key: 'text',
     label: '文本',
+    middleComp:'TextEdit',
     icon: 'EditPen'
   }, {
     key: 'form',

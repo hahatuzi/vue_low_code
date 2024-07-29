@@ -13,7 +13,10 @@
 
 <script setup name="EditorLeft">
 import { ref,inject, onMounted } from 'vue';
+import $bus from '@/utils/mitt'
+
 import menuConfig from '../../../../config/menu.js'
+
 const config = inject('config')
 const props = defineProps({
   middleDrop:{
@@ -27,7 +30,9 @@ function dragStart (component,e) {
   console.log(e,component)
   // e.dataTransfer.dropEffect = 'move'
   // console.log(contaienrRef.value)
-  props.middleDrop(component)
+  // props.middleDrop(component)
+  $bus.emit('changeComp',component)
+
 }
 onMounted(() => {
   // contaienrRef.value.addEventListener('drop', drop)
