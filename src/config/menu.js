@@ -6,9 +6,9 @@ const menuConfig = [
     icon: 'Picture'
   },
   {
-    key: 'text',
+    key: 'Text',
     label: '文本',
-    middleComp:'TextEdit',
+    middleComp:'Text',
     icon: 'EditPen'
   }, {
     key: 'form',

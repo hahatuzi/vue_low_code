@@ -19,20 +19,16 @@
   </div>
 </template>
 
-<script setup lang="ts" name="EditorMiddle">
+<script setup name="EditorMiddle">
 import $bus from '@/utils/mitt'
 import { ref, provide, onMounted } from 'vue';
 import configComponents from '@/components/middle/index.js'
 const containerEdit = ref(null)
-// console.log(router)
-// console.log(config)
-// provide('config',config)
-// const containerRef = ref(null)
+
 const currentComponent = ref(null)
 const compList = ref([])
 
 function dragenter (e){
-  // console.log('enter',e)
   e.dataTransfer.dropEffect = 'move'
 }
 function dragover (e){
@@ -89,7 +85,7 @@ onMounted(() => {
 <style lang="scss" scoped>
   .middle{
     flex:1;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     background: #f0f2f5;
     position: relative;
     .middle_top{

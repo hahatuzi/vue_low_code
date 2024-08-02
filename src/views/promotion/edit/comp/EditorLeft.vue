@@ -17,14 +17,14 @@ import $bus from '@/utils/mitt'
 
 import menuConfig from '../../../../config/menu.js'
 
-const config = inject('config')
-const props = defineProps({
-  middleDrop:{
-    type:Function,
-    default:() => {}
-  }
-})
-console.log(config)
+// const config = inject('config')
+// const props = defineProps({
+//   middleDrop:{
+//     type:Function,
+//     default:() => {}
+//   }
+// })
+// console.log(config)
 
 function dragStart (component,e) {
   console.log(e,component)
@@ -41,10 +41,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .edit_container{
-  width: 100%;
+  width: 180px;
   // height: 100%;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   justify-content: space-around;
   .item{
     width: 60px;
