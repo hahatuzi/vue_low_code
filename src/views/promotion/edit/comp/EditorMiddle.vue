@@ -6,17 +6,15 @@
         <el-button link>预览</el-button>
       </div>
       <div class="middle_edit" ref="containerEdit">
-        <div v-for="item in middleComp" :key="item.key">
-          {{ item.middleComp }}
+        <div v-for="(item,index) in compList" :key="item.key" :class="['comp',{ 'cur_comp':currentComponent.middleComp == item.middleComp }]" @click="handleComp(item)">
           <component :is="configComponents[item.middleComp]"></component>
-          <!--文本控件-->
-          <!-- <TextEdit v-if="comp.type === 'text'" :component="comp"></TextEdit> -->
-          <!--图片控件-->
-          <!-- <ImgEdit v-if="comp.type === 'img'" :component="comp"></ImgEdit> -->
-          <!--表单控件-->
-          <!-- <FormEdit v-if="comp.type === 'form'" :component="comp"></FormEdit> -->
+          <!-- 功能区:上移，下移，删除 -->
+          <div class="tools" v-if="currentComponent.middleComp == item.middleComp">
+            <div :class="['item',{'disabled_item':index == 0}]" @click="upComp(item,index)"><el-icon size="20"><CaretTop /></el-icon></div>
+            <div :class="['item',{'disabled_item':index == compList.length - 1}]" @click="downComp(item,index)"><el-icon size="20"><CaretBottom /></el-icon></div>
+            <div class="item" @click="deleteComp(index)"><el-icon size="16"><DeleteFilled /></el-icon></div>
+          </div>
         </div>
-      <!-- <div v-for="item in middleComp" :key="item.key" v-bind="item">{{ config.componentMap[item.key].render() }}</div> -->
       </div>
   </div>
 </template>
@@ -25,14 +23,13 @@
 import $bus from '@/utils/mitt'
 import { ref, provide, onMounted } from 'vue';
 import configComponents from '@/components/middle/index.js'
-console.log(configComponents)
 const containerEdit = ref(null)
 // console.log(router)
 // console.log(config)
 // provide('config',config)
 // const containerRef = ref(null)
 const currentComponent = ref(null)
-const middleComp = ref([])
+const compList = ref([])
 
 function dragenter (e){
   // console.log('enter',e)
@@ -49,23 +46,40 @@ function dragleave (e){
 function drop (e){
   console.log('drop',e)
   // currentComponent = null
-  middleComp.value = [...middleComp.value, {
+  compList.value = [...compList.value, {
     top:e.offsetY,
     left:e.offsetX,
     zIndex:1,
     key:currentComponent.value.key,
-    middleComp: e.middleComp
+    middleComp: currentComponent.value.middleComp
   }]
   // console.log(middleComp)
 }
+// 上移元素
+function upComp (comp,index) {
+  compList.value.splice(index,1)
+  compList.value.splice(index -1 , 0, comp)
+}
+// 下移元素
+function downComp (comp,index) {
+  compList.value.splice(index,1)
+  compList.value.splice(index + 1 , 0, comp)
+}
+// 删除元素
+function deleteComp (index) {
+   compList.value.splice(index , 1)
+}
 function renderMiddle (comp) {
-  console.log(comp);
   currentComponent.value = comp
 
   containerEdit.value.addEventListener('dragenter',dragenter)
   containerEdit.value.addEventListener('dragover',dragover)
   containerEdit.value.addEventListener('dragleave',dragleave)
   containerEdit.value.addEventListener('drop',drop) //松手的时候
+}
+// 点击组件
+function handleComp(comp) {
+  currentComponent.value = comp
 }
 onMounted(() => {
   $bus.on('changeComp', e => renderMiddle(e))
@@ -87,7 +101,7 @@ onMounted(() => {
       background: #fff;
       // background-image: linear-gradient(#fff 2px,transparent 0),linear-gradient(90deg,#999 1px,transparent 0);
       width: 375px;
-      height: 550px;
+      height: 600px;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -99,6 +113,34 @@ onMounted(() => {
   // background-position: 0 0, 25px 25px;
   // background-size: 2px 2px;
 // }
+.comp{
+  cursor: pointer;
+  border:  1px solid transparent;
+  position: relative;
+  .tools{
+    position: absolute;
+    right: -38px;
+    top: 0;
+    // width: 28px;
+    // height: 100px;
+    text-align: center;
+    border-radius: 5px;
+    .item{
+      width: 28px;
+      height: 28px;
+      background: #fff;
+    // border-bottom: 1px solid #ccc;
+      margin-bottom: 2px;
+      color: #666;
+    }
+    .disabled_item{
+      color: #e4e4e4;
+    }
+  }
+}
+.cur_comp{
+  border:  1px solid #2aa7ff;
+}
     }
   }
 </style>
