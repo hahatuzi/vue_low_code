@@ -75,6 +75,12 @@ function renderMiddle (comp) {
     width: 180px;
     border: 1px solid #ccc;
   }
+  .left{
+    border-right: 0px;
+  }
+  .right{
+    border-left: 0px;
+  }
 //   .middle{
 //     flex:1;
 //     border: 1px solid #ccc;

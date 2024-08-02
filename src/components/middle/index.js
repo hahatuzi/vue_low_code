@@ -1,27 +1,9 @@
-import {markRaw} from 'vue'
-const modules = import.meta.glob('./*.vue')
-
-let components = {}
-const keys = Object.keys(modules)
-console.log(modules)
-// for (const path in keys) {
-//   // modules[path]().then(async (mod) => {
-//   //   const comonentName = path.replace(/^\.\.vue$/,'$1')
-//   //   components[comonentName] = markRaw(mod.default)
-//   //   console.log(comonentName,'comonentName',mod.default)
-//   // })
-//   // console.log(path.lastIndexOf('/') + 1, path.lastIndexOf('.vue'))
-//   console.log(path)
-//   let reg = new RegExp(`/(.*).`)
-//   let name = path.match()
-//   console.log(name)
-//   components[name] = modules[path].default
-// }
-keys.forEach(path => {
-  let reg = new RegExp(`/(.*).`)
-  let name = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.vue'))
-  components[name] = modules[path]
-})
-export default {
-  components:{...components}
+// 注册编排区域组件，组件名与config下的menu.js中的middleComp属性一致
+const modules = import.meta.globEager("./*.vue")
+const componentsMoudleObj = {}
+for (const key in modules) {
+  let name = key.substring(key.lastIndexOf('/') + 1, key.lastIndexOf('.vue'))
+  componentsMoudleObj[name] = modules[key].default
 }
+
+export default componentsMoudleObj

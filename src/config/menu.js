@@ -2,6 +2,7 @@ const menuConfig = [
   {
     key: 'img',
     label: '图片',
+    middleComp:'ImgEdit',
     icon: 'Picture'
   },
   {
@@ -12,10 +13,12 @@ const menuConfig = [
   }, {
     key: 'form',
     label: '表单',
+    middleComp:'FormEdit',
     icon: 'Document'
   },{
-    key: 'form',
+    key: 'button',
     label: '按钮',
+    middleComp:'ButtonEdit',
     icon: 'Pointer'
   }
 ]
