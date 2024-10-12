@@ -12,31 +12,21 @@
 </template>
 
 <script setup name="EditorLeft">
-import { ref,inject, onMounted } from 'vue';
+import { toRaw, defineEmits } from 'vue';
 import $bus from '@/utils/mitt'
 
 import menuConfig from '../../../../config/menu.js'
+import menuProps from '../../../../config/props.js'
 
-// const config = inject('config')
-// const props = defineProps({
-//   middleDrop:{
-//     type:Function,
-//     default:() => {}
-//   }
-// })
-// console.log(config)
+const emit = defineEmits(['addComp'])
 
+// 拖动左侧表单项
 function dragStart (component,e) {
-  console.log(e,component)
-  // e.dataTransfer.dropEffect = 'move'
-  // console.log(contaienrRef.value)
-  // props.middleDrop(component)
-  $bus.emit('changeComp',component)
-
+  // 组件添加配置属性
+  component.config = menuProps[component.key]
+  $bus.emit('changeComp',toRaw(component))
 }
-onMounted(() => {
-  // contaienrRef.value.addEventListener('drop', drop)
-})
+
 </script>
 
 <style lang="scss" scoped>

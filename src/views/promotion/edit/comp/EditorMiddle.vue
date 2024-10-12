@@ -6,12 +6,14 @@
         <el-button link>预览</el-button>
       </div>
       <div class="middle_edit" ref="containerEdit">
-        <div v-for="(item,index) in compList" :key="item.key" :class="['comp',{ 'cur_comp':currentComponent.middleComp == item.middleComp }]" @click="handleComp(item)">
-          <component :is="configComponents[item.middleComp]"></component>
+        <div v-for="(item,index) in list" :key="item.index" :class="['comp',{ 'cur_comp':props.index == index }]">
+          <div @click="handleComp(item,index)">
+            <component  :index="index"  :is="configComponents[item.middleComp]" :config="item.config"></component>
+          </div>
           <!-- 功能区:上移，下移，删除 -->
-          <div class="tools" v-if="currentComponent.middleComp == item.middleComp">
+          <div class="tools" v-if="props.index == index">
             <div :class="['item',{'disabled_item':index == 0}]" @click="upComp(item,index)"><el-icon size="20"><CaretTop /></el-icon></div>
-            <div :class="['item',{'disabled_item':index == compList.length - 1}]" @click="downComp(item,index)"><el-icon size="20"><CaretBottom /></el-icon></div>
+            <div :class="['item',{'disabled_item':index == props.list.length - 1}]" @click="downComp(item,index)"><el-icon size="20"><CaretBottom /></el-icon></div>
             <div class="item" @click="deleteComp(index)"><el-icon size="16"><DeleteFilled /></el-icon></div>
           </div>
         </div>
@@ -21,61 +23,76 @@
 
 <script setup name="EditorMiddle">
 import $bus from '@/utils/mitt'
-import { ref, provide, onMounted } from 'vue';
+import { ref, onMounted, watch, toRaw  } from 'vue';
 import configComponents from '@/components/middle/index.js'
-const containerEdit = ref(null)
 
-const currentComponent = ref(null)
-const compList = ref([])
+const props = defineProps({
+  list:{
+    type:Array,
+    default:[]
+  }, // 组件列表
+  index:'' // 当前组件索引
+})
+
+const emit = defineEmits(['update:list', 'update:index'])
 
 function dragenter (e){
   e.dataTransfer.dropEffect = 'move'
 }
 function dragover (e){
-  // console.log('dragover',e)
   e.preventDefault()
 }
 function dragleave (e){
-  // console.log('dragleave',e)
   e.dataTransfer.dropEffect = 'none'
 }
-function drop (e){
-  console.log('drop',e)
-  // currentComponent = null
-  compList.value = [...compList.value, {
-    top:e.offsetY,
-    left:e.offsetX,
-    zIndex:1,
-    key:currentComponent.value.key,
-    middleComp: currentComponent.value.middleComp
-  }]
-  // console.log(middleComp)
+function drop (comp){
+  addComp(comp)
+}
+// 新增元素
+function addComp (comp){
+  let obj =  JSON.parse(JSON.stringify(comp))
+  let arr = props.list
+  arr.push({...obj})
+  // arr.push({...obj, index:arr.length})
+  let index = arr.length
+
+  emit('update:list',arr)
+  emit('update:index', index - 1)
 }
 // 上移元素
 function upComp (comp,index) {
-  compList.value.splice(index,1)
-  compList.value.splice(index -1 , 0, comp)
+  let arr = props.list
+  arr.splice(index,1)
+  arr.splice(index - 1 , 0, comp)
+  emit('update:list',arr)
+  emit('update:index',index - 1)
 }
 // 下移元素
 function downComp (comp,index) {
-  compList.value.splice(index,1)
-  compList.value.splice(index + 1 , 0, comp)
+  let arr = props.list
+  arr.splice(index, 1)
+  arr.splice(index + 1 , 0, comp)
+
+  emit('update:list',arr)
+  emit('update:index',index + 1)
 }
 // 删除元素
 function deleteComp (index) {
-   compList.value.splice(index , 1)
-}
-function renderMiddle (comp) {
-  currentComponent.value = comp
+  let arr = props.list
+  arr.splice(index , 1)
 
+  emit('update:list',arr)
+}
+const containerEdit = ref(null)
+function renderMiddle (comp) {
   containerEdit.value.addEventListener('dragenter',dragenter)
   containerEdit.value.addEventListener('dragover',dragover)
   containerEdit.value.addEventListener('dragleave',dragleave)
-  containerEdit.value.addEventListener('drop',drop) //松手的时候
+  containerEdit.value.addEventListener('drop',drop(comp)) //松手的时候
 }
-// 点击组件
-function handleComp(comp) {
-  currentComponent.value = comp
+// 点击组件,改变当前组件
+function handleComp(comp,index) {
+  emit('update:index',index)
 }
 onMounted(() => {
   $bus.on('changeComp', e => renderMiddle(e))

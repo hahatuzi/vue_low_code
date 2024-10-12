@@ -1,24 +1,24 @@
 <template>
   <div class="right">
-    <component :is="configComponents[currentComponent.key]"></component>
+    <div v-for="(item,index) in props.list" :key="item.index">
+      <component v-if="index == props.index" :is="configComponents[item.rightComp]" v-model:config="item.config"></component>
+    </div>
   </div>
 </template>
 
 <script setup name="EditorRight">
 import configComponents from '@/components/right/index.js'
-import { ref, provide, onMounted } from 'vue';
-import $bus from '@/utils/mitt'
+import { ref,watch, } from 'vue';
 
-let currentComponent = ref('')
-console.log(configComponents)
-function renderRight (comp) {
-  currentComponent.value = comp
-  console.log(comp)
-}
-
-onMounted(() => {
-  $bus.on('changeComp', e => renderRight(e))
+const emit = defineEmits(['update:list', 'update:index'])
+const props = defineProps({
+  list:{
+    type:Array,
+    default:[]
+  }, // 组件列表
+  index:'', // 当前组件索引
 })
+
 </script>
 
 <style lang="scss" scoped>
