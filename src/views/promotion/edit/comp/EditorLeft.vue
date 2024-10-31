@@ -1,6 +1,6 @@
 <template>
   <div class="edit_container">
-    <div v-for="item in menuConfig" :key="item.label" class="item" :draggable="true" @dragstart="dragStart(item)">
+    <div v-for="item in menuList" :key="item.label" class="item" :draggable="true" @dragstart="dragStart(item)">
       <div class="icon">
         <el-icon  size="20">
           <component :is="item.icon" />
@@ -15,15 +15,15 @@
 import { toRaw, defineEmits } from 'vue';
 import $bus from '@/utils/mitt'
 
-import menuConfig from '../../../../config/menu.js'
-import menuProps from '../../../../config/props.js'
+import menuList from '../../../../config/menu.js'
+import menuConfig from '../../../../config/props.js'
 
 const emit = defineEmits(['addComp'])
 
 // 拖动左侧表单项
 function dragStart (component,e) {
   // 组件添加配置属性
-  component.config = menuProps[component.key]
+  component.config = menuConfig[component.key]
   $bus.emit('changeComp',toRaw(component))
 }
 

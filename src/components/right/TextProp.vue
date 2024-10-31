@@ -26,9 +26,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="btn">
+    <!-- <div class="btn">
       <el-button type="primary" class="submit" @click="sumbit">修改</el-button>
-    </div>
+    </div> -->
     <!-- </el-card> -->
   </div>
 </template>

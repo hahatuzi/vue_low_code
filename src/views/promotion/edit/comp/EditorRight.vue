@@ -1,8 +1,10 @@
 <template>
   <div class="right">
-    <div v-for="(item,index) in props.list" :key="item.index">
-      <component v-if="index == props.index" :is="configComponents[item.rightComp]" v-model:config="item.config"></component>
-    </div>
+    <template v-for="(item,index) in props.list">
+      <div style="height: 100%;"  :key="item.index" v-if="index == props.index">
+        <component :is="configComponents[item.rightComp]" v-model:config="item.config"></component>
+      </div>
+    </template>
   </div>
 </template>
 

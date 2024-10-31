@@ -2,8 +2,8 @@
   <div class="middle">
      <!-- 页面功能区 -->
      <div class="middle_top">
-        <el-button link>保存</el-button>
-        <el-button link>预览</el-button>
+        <el-button @click="save">保存</el-button>
+        <el-button @click="preview">预览</el-button>
       </div>
       <div class="middle_edit" ref="containerEdit">
         <div v-for="(item,index) in list" :key="item.index" :class="['comp',{ 'cur_comp':props.index == index }]">
@@ -18,10 +18,12 @@
           </div>
         </div>
       </div>
+      <Preview v-model="showDialog"></Preview>
   </div>
 </template>
 
 <script setup name="EditorMiddle">
+import Preview from '@/components/Preview.vue'
 import $bus from '@/utils/mitt'
 import { ref, onMounted, watch, toRaw  } from 'vue';
 import configComponents from '@/components/middle/index.js'
@@ -34,6 +36,7 @@ const props = defineProps({
   index:'' // 当前组件索引
 })
 
+let showDialog = ref(false)
 const emit = defineEmits(['update:list', 'update:index'])
 
 function dragenter (e){
@@ -93,6 +96,13 @@ function renderMiddle (comp) {
 // 点击组件,改变当前组件
 function handleComp(comp,index) {
   emit('update:index',index)
+}
+
+function save() {
+  console.log(props.list)
+}
+function preview () {
+  showDialog.value = true
 }
 onMounted(() => {
   $bus.on('changeComp', e => renderMiddle(e))

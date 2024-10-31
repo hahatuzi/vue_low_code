@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" :style="{...props.config.style,fontSize:handlePX(props.config.style.fontSize)}">按钮</el-button>
+    <div :style="style">{{ config.content }}</div>
   </div>
 </template>
 
@@ -18,6 +18,20 @@ const props = defineProps({
 function handlePX (val) {
   return val + 'px'
 }
+
+const style = computed(() => {
+  if(!props.config) return {}
+  let {isFullWidth, width, height, borderRadius, fontSize} = props.config.style
+  return {
+    ...props.config.style,
+    "width": isFullWidth ? '100%' : width + 'px',
+    "height": height + 'px',
+    "line-height": height + 'px',
+    "border-radius": borderRadius + 'px',
+    "font-size": fontSize + 'px',
+  }
+})
+
 watch(() => props.config, (val) => {
   console.log(val)
 })

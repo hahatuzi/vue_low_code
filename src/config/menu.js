@@ -7,7 +7,7 @@
 *  rightComp：对应右侧配置面板的组件名称
 */
 
-const menuConfig = [
+const menuList = [
   {
     key: 'Img',
     label: '图片',
@@ -35,4 +35,4 @@ const menuConfig = [
     rightComp:'ButtonProp',
   }
 ]
-export default menuConfig
+export default menuList

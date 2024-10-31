@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-for="item in menuConfig" :key="item.label" class="item" :draggable="true" @dragstart="dragStart(item)">
+    <div v-for="item in menuList" :key="item.label" class="item" :draggable="true" @dragstart="dragStart(item)">
       <div class="icon">
         <el-icon  size="14" :style="{color:'red'}">
           <component :is="item.icon" />
@@ -14,7 +14,7 @@
 
 <script setup name="EditorLeft">
 import { ref,inject, onMounted } from 'vue';
-import menuConfig from '../config/menu.js'
+import menuList from '../config/menu.js'
 const config = inject('config')
 const props = defineProps({
   middleDrop:{
