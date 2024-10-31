@@ -14,3 +14,7 @@
 
 - 方案一：provide==inject
 - 方案二：store
+
+# 参考项目
+  - https://yangyuji.github.io/h5-factory/
+  - https://gitee.com/buqiyuan/vite-vue3-lowcode#%E9%83%A8%E5%88%86%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA
